@@ -37,5 +37,32 @@ def findSinrHistory(p_history):
         
     return  sinr_history
     
+number_of_epochs = 10
+epoch_range = range(number_of_epochs)
+
+phistory = findPhistory(number_of_epochs)
+sinr_history = findSinrHistory(phistory)
+print sinr_history
+
+p = phistory[:,1]
+import power_control
+reload(power_control)
+print power_control.findInterference(p,0)
+
+import matplotlib
+
+matplotlib.pyplot.plot(phistory[0,:], label= 'p0')
+matplotlib.pyplot.plot(phistory[1,:], label= 'p1')
+matplotlib.pyplot.plot(phistory[2,:], label= 'p2')
+matplotlib.pyplot.legend()
+matplotlib.pyplot.show()
+
+
+matplotlib.pyplot.plot(sinr_history[0,:], label= 'S_0')
+matplotlib.pyplot.plot(sinr_history[1,:], label= 'S_1')
+matplotlib.pyplot.plot(sinr_history[2,:], label= 'S_2')
+matplotlib.pyplot.legend()
+
+    
     
     
