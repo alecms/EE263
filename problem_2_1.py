@@ -1,16 +1,18 @@
 import numpy
 import power_control
 import discrete_time
+reload(power_control)
+reload(discrete_time)
 
-def findPhistory(number_of_epochs):
+def findPhistory(number_of_epochs, gamma):
     
     reload(power_control)
     reload(discrete_time)
             
-    A = power_control.findA()
-    b = power_control.findB()
+    A = power_control.findA(gamma)
+    b = power_control.findB(gamma)
     
-    p = numpy.zeros((power_control.n, 1))
+    p = 0.0004 * numpy.ones((power_control.n, 1))
     
     epoch_range = range(number_of_epochs)
     
@@ -20,12 +22,10 @@ def findPhistory(number_of_epochs):
         p_history[:, i] = p.T
         p = discrete_time.xtPlus1(p, A, b)                
     return p_history
-
-def findSinrHistory(p_history):
     
-    reload(power_control)
+def findSinrHistory(number_of_epochs, gamma):
+    p_history = findPhistory(number_of_epochs, gamma)
     
-    number_of_epochs = p_history.shape[1]
     epoch_range = range(number_of_epochs)
     
     sinr_history = numpy.zeros(shape=(power_control.n,number_of_epochs))
@@ -37,31 +37,50 @@ def findSinrHistory(p_history):
         
     return  sinr_history
     
-number_of_epochs = 10
-epoch_range = range(number_of_epochs)
+number_of_epochs = 50
+gamma = 3
 
-phistory = findPhistory(number_of_epochs)
-sinr_history = findSinrHistory(phistory)
-print sinr_history
-
-p = phistory[:,1]
-import power_control
-reload(power_control)
-print power_control.findInterference(p,0)
-
-import matplotlib
-
-matplotlib.pyplot.plot(phistory[0,:], label= 'p0')
-matplotlib.pyplot.plot(phistory[1,:], label= 'p1')
-matplotlib.pyplot.plot(phistory[2,:], label= 'p2')
-matplotlib.pyplot.legend()
-matplotlib.pyplot.show()
+alpha_gamma = power_control.alpha * gamma * numpy.ones(number_of_epochs)
+phistory = findPhistory(number_of_epochs, gamma)
+sinr_history = findSinrHistory(number_of_epochs, gamma)
 
 
-matplotlib.pyplot.plot(sinr_history[0,:], label= 'S_0')
-matplotlib.pyplot.plot(sinr_history[1,:], label= 'S_1')
-matplotlib.pyplot.plot(sinr_history[2,:], label= 'S_2')
-matplotlib.pyplot.legend()
+import matplotlib.pyplot as plt
+
+
+plt.clf()
+plt.cla()
+plt.plot(sinr_history[0,:], label= 'S_0')
+plt.plot(sinr_history[1,:], label= 'S_1')
+plt.plot(sinr_history[2,:], label= 'S_2')
+plt.plot(alpha_gamma, label = 'alpha x gamma')
+plt.legend()
+plt.title('SINR vs. t for gamma = ' + str(gamma))
+plt.xlabel('t (epochs)')
+plt.ylabel('SINR')
+plt.draw()
+plt.show()
+
+
+plt.figure()
+plt.plot(phistory[0,:], label= 'p0')
+plt.plot(phistory[1,:], label= 'p1')
+plt.plot(phistory[2,:], label= 'p2')
+plt.legend()
+plt.draw()
+plt.show()
+
+#def findPhistoryTheOtherWay(number_of_epchs):
+#    p = numpy.ones((power_control.n, 1))
+#    epoch_range = range(number_of_epochs)
+#    
+#    p_history = numpy.zeros(shape=(power_control.n,number_of_epochs))
+#    
+#    for i in epoch_range:
+#        p_history[:, i] = p.T
+#        p = p * power_control.alpha * power_control.gamma / power_control.findSinr(p)
+#    
+#    return p_history
 
     
     
