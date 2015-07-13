@@ -28,15 +28,15 @@ length_ten = 10
 
 for length in range(2,length_ten + 1):
     allowable_sequences_for_different_lengths.append([])
-    for sequence in allowable_sequences_for_different_lengths[length - 2]:            
-        allowed_followers = allowedFollowers[sequence[length - 2]]
+    for sequence in allowable_sequences_for_different_lengths[-2]:            
+        allowed_followers = allowedFollowers[sequence[-1]]
         for follower in allowed_followers:
             new_sequence = list(sequence)
             new_sequence.append(follower)
-            allowable_sequences_for_different_lengths[length - 1].append(new_sequence)
+            allowable_sequences_for_different_lengths[-1].append(new_sequence)
         
 
-sequences_of_length_10 = allowable_sequences_for_different_lengths[length_ten - 1]
+sequences_of_length_10 = allowable_sequences_for_different_lengths[-1]
 
 for symbol in range(1,6):
     frequency = CountFrequency(symbol, 7, sequences_of_length_10)
