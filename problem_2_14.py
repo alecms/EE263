@@ -64,18 +64,15 @@ def find_destination_pseudonode(path_length, destination_node):
     destination_pseudonode = get_pseudonode(destination_node, arrival_frame)
     return destination_pseudonode
     
-def check_if_path_exists(source_node, destination_node, B):
+def check_if_path_exists(source_node, destination_node, path_length, B):
     source_pseudonode = get_pseudonode(source_node, 1)
-    destination_pseudonodes = find_associated_pseudonodes(destination_node)
+    destination_pseudonode = find_destination_pseudonode(path_length, destination_node)
     
-    for destination_pseudonode in destination_pseudonodes:
-        # print "source_pseudonode = {0}, destination_pseudonode = {1}".format(source_pseudonode, destination_pseudonode)
-        # print B
-        if(check_if_path_exists_between_pseudonodes(source_pseudonode, \
-           destination_pseudonode, B)):
-            return True
-        
-    return False
+    if(check_if_path_exists_between_pseudonodes(source_pseudonode, \
+    destination_pseudonode, B)):
+        return True
+    else:
+        return False
                     
 def find_length_of_shortest_path(source, destination, E, path_count_arrays):
     N = E.shape[0]
@@ -87,7 +84,7 @@ def find_length_of_shortest_path(source, destination, E, path_count_arrays):
         B = B.dot(E)
         path_count_arrays.append(B)
         
-        if check_if_path_exists(source, destination, B):
+        if check_if_path_exists(source, destination, frame_count, B):
              return frame_count
         
         if frame_count == max_frames_to_try:
