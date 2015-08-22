@@ -1,0 +1,105 @@
+
+
+array active_nodes
+
+
+active_node
+
+  Properties:
+  id
+  parent
+  birth_frame
+  
+  Methods:
+  
+  constructor(id, active_node parent_node, birth_frame)
+  
+  propagate(frame, active_nodes)
+    
+    child_nodes
+    
+    for i = 1 to n
+      // If we can reach node i in this frame and
+      // the node is not already active
+      if (A[i, id] == frame) && !active_nodes.search_for_node(i)
+        child_node = new active_node(i, this, frame)
+        child_nodes.append(child_node)
+      end if
+    end for
+    
+    return child_nodes
+  
+  
+ backtrack()
+    parent = node.received_signal_from
+    history = {}
+    
+    if !parent.id == -1
+      parent_history = (backtrack(parent))      
+      history = parent_history.append(parent)
+      return history
+    else
+      //Return an empty list
+      return {}
+    end if
+  
+    return history
+
+active_nodes
+
+  Inherits from list
+  
+  constructor(starting_point)
+    active_nodes[0] = new active_node(starting_point, -1)
+
+  
+  propagate(active_nodes, frame)
+    if !flood_completion_check()      
+      for each parent_node in active_nodes
+        next_generation.append(parent_node.propagate(frame, active_nodes))
+      end for  
+      active_nodes.append(next_generation)
+      
+  flood(frame, nodes)
+    if !flood_completion_check(nodes)
+      frame = 1
+      propagate(nodes, frame)
+      flood(frame + 1, nodes)
+    else
+      return
+      
+      
+  //Returns history
+  backtrack(node)
+    parent = node.received_signal_from
+    history = {}
+    
+    if !parent.id == -1
+      history.append(backtrack(parent))      
+    else
+      history.append(parent)
+    end if
+  
+    return history
+      
+  
+Question  
+If a class inherits from array, how does it refer to its own elements?
+      
+      
+      
+      
+      child_nodes = propagate(active_nodes)
+      
+    else 
+      return parent_nodes
+  
+  flood_completion_check()
+  
+  
+while(!search_for_node(destination, active_nodes)
+
+  
+  
+  
+  frame++
