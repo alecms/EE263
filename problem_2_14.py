@@ -1,12 +1,19 @@
 import numpy
+import ts_data
+reload(ts_data)
 
-A = numpy.array([[0, 0, 0, 1],
-                [2, 0, 1, 0],
-                [0, 0, 0, 2],
-                [0, 3, 0, 0]])
+numpy.set_printoptions(threshold=numpy.nan)
+
+#A = numpy.array([[0, 0, 0, 1],
+#                [2, 0, 1, 0],
+#                [0, 0, 0, 2],
+#                [0, 3, 0, 0]])
+                
+A = ts_data.A                
+                
 K = 3
 
-max_frames_to_try = 10
+max_frames_to_try = 40
 
 def get_pseudonode(node, frame):
     index = (node - 1) * K + frame
@@ -184,6 +191,8 @@ def find_shortest_path(source_node, destination_node):
     
     path_count_arrays = []
     number_of_frames = find_length_of_shortest_path(source_node, destination_node, E, path_count_arrays)
+    if not number_of_frames:
+        return
     destination_pseudonode = find_destination_pseudonode(number_of_frames, destination_node) 
     #print number_of_frames
     #print destination_pseudonode
@@ -207,21 +216,43 @@ def find_shortest_path(source_node, destination_node):
     print_routing_instructions(timestamps, frames, node_path)
 
 
+def check_if_flood_complete(source_node, elapsed_time, B):
+    for destination_node in range(1, A.shape[0] + 1):
+        if not check_if_path_exists(source_node, destination_node, elapsed_time, B):
+			return False	
+    return True
+    
+def time_flood(source_node, path_count_arrays):
+    E = build_expanded_matrix(A)
+    frame_count = 0
+    B = numpy.eye(E.shape[0], dtype=int)
+
+    while True:
+        frame_count += 1
+        B = B.dot(E)
+        path_count_arrays.append(B)
+        if check_if_flood_complete(source_node, frame_count, B):
+            print "This network takes {0} frames to flood from node {1}".format(frame_count, source_node)
+            return frame_count
+        if frame_count == max_frames_to_try:
+            print \
+            "Was not able to complete flood from {0} in {1} frames."\
+            .format(source_node, frame_count)
+            return False
 	
-source_node = 1
-destination_node = 3
 
+
+source_node = 5		
+destination_node = 18
+
+print ""
 find_shortest_path(source_node, destination_node)
+print ""
 
+source_node = 7
+path_count_arrays = []
+time_to_flood = time_flood(source_node, path_count_arrays)	
 
-E = build_expanded_matrix(A)
-
-
-E5 = numpy.linalg.matrix_power(E,5)
-print E5
-
-E4 = numpy.linalg.matrix_power(E,4)
-print E4
 
 
             
