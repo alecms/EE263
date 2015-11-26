@@ -95,6 +95,18 @@ class PathNode(Node):
             path_length += 1
             	  	    
         return self.paths
+        
+    def find_shortest_path_excluding(self, node_index):
+        A = self.A
+        self.A = self.A.cutoff_node(node_index)
+        shortest_paths = self.find_shortest_path()
+        self.A = A
+        return shortest_paths
+        
+    def find_shortest_paths_including(self, node_index):
+        checkpoint = PathNode(node_index, 0, self.A, [], self.destination)
+        inclusive_path = InclusivePath(self, checkpoint)
+        return inclusive_path.paths
                 
         
 class CycleEndpoint(PathNode):
@@ -111,3 +123,34 @@ class CycleEndpoint(PathNode):
         else:
             return True
                                       
+class InclusivePath(object):
+    def __init__(self, source, checkpoint):
+        self.original_destination = source.destination
+        self.source = source
+        self.checkpoint = checkpoint
+        self.find_inbound_paths()
+        self.find_outbound_paths()
+        self.paths = self.merge_paths()
+    
+    def find_inbound_paths(self):
+        inbound_source = PathNode(self.source.index, 0, self.source.A, [], self.checkpoint)
+        self.inbound_paths = inbound_source.find_shortest_path()
+        
+    def find_outbound_paths(self):
+        self.checkpoint.destination = self.source.destination
+        self.outbound_paths = self.checkpoint.find_shortest_path()
+        
+    def merge_paths(self):
+        paths = list()
+        for inbound_path in self.inbound_paths:
+           inbound_path.pop()
+           for outbound_path in self.outbound_paths:               
+               path = inbound_path + outbound_path                      
+               paths.append(path)
+        
+        return paths
+            
+    
+                                      
+                                                                        
+                                                                                                                                            

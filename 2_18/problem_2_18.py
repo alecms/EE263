@@ -8,22 +8,33 @@ reload(node)
 reload(node_adjacency_matrix)
 
 
-#A = np.array([[0, 1, 1, 1],
-#                 [1, 0, 1, 0],
-#                 [1, 1, 0, 0],
-#                 [0, 1, 0, 0]])
-
-
+print "2.18 a)"
 A = node_adjacency_matrix.NodeAdjacencyMatrix((20,20), buffer=np.array(data.A_data), dtype=int)
+print "Shortest cycle:"
 print A.find_shortest_cycles()
+print "\n"
 
-
-
-                                                             
+print "2.18 b)"
 destination = node.Node(17, 1)
-source = node.PathNode(9, 0, A, [], destination)
-
+source = node.PathNode(13, 0, A, [], destination)
+print "Shortest path between 13 and 17:"
 print source.find_shortest_path()
+print "\n"
+
+
+print "2.18 c)"
+A_modified = A.cutoff_node(3)                                                            
+source = node.PathNode(13, 0, A_modified, [], destination)
+print "Shortest path between 13 and 17 that does not go through 3:"
+print source.find_shortest_path_excluding(3)
+print "\n"
+
+print "2.18 d)"
+print "Shortest paths between 13 and 17 that go through 9:"
+print source.find_shortest_paths_including(9)
+print "\n"
+
+
 
 
 #B = np.linalg.matrix_power(A,20)

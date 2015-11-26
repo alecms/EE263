@@ -1,6 +1,7 @@
 import numpy 
 import data
 import node
+import copy
 
 reload(data)
 reload(node)
@@ -25,28 +26,32 @@ class NodeAdjacencyMatrix(numpy.ndarray):
         return outgoing_connections 
         
     def find_shortest_cycles(self):
-        starting_guess_for_shortest_cycle = 30
         number_of_nodes = len(self)
         # print number_of_nodes
-        length_of_shortest_cycle = starting_guess_for_shortest_cycle
+        length_of_shortest_cycle = -1
         shortest_cycles = list()
         for node_index in range(1,number_of_nodes + 1):
-            # print "Checking node {0}".format(node_index)
-            path_length = 2
-            while path_length <= length_of_shortest_cycle:
-                endpoint = node.CycleEndpoint(node_index, path_length, self) 
-                if endpoint.check_if_cycle_exists():
-                    if path_length == length_of_shortest_cycle:
-                        # print endpoint.paths
-                        shortest_cycles += endpoint.paths
-                    else:
-                        shortest_cycles = list(endpoint.paths)
-                        # print endpoint.paths                
-                        length_of_shortest_cycle = len(shortest_cycles[0]) - 1            
-                # print path_length
-                path_length += 1
-            
-	  	    
+            endpoint = node.CycleEndpoint(node_index, 2, self)
+            shortest_paths = endpoint.find_shortest_path() 
+            if len(shortest_paths) > 0:
+                path_length = len(shortest_paths[0])
+                       
+                if path_length == length_of_shortest_cycle:
+                    # print endpoint.paths
+                    shortest_cycles += endpoint.paths
+                elif path_length < length_of_shortest_cycle or length_of_shortest_cycle < 0:
+                    shortest_cycles = list(endpoint.paths)
+                    # print endpoint.paths                
+                    length_of_shortest_cycle = len(shortest_cycles[0]) - 1            
+                    # print path_length
+                	    
         return shortest_cycles
  
   
+    # Returns a copy of the node adjacency matrix with all incoming connections 
+    # to node_index cut
+    def cutoff_node(self, node_index):
+        a_mod = copy.copy(self)
+        blank_row = numpy.zeros((len(self),), dtype=numpy.int)
+        a_mod[node_index - 1] = blank_row
+        return a_mod
