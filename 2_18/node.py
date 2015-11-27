@@ -58,11 +58,10 @@ class PathNode(Node):
             print "Ancestor index = {0}".format(ancestor)
     
     
-    def propagate(self):                
+    def propagate(self, allow_double_back):                
         self.paths = []
         
-       
-        if (self.index != self.destination.index and len(self.ancestors) < PathNode.maximum_path_length) or len(self.ancestors) == 0:            
+        if self.distance_from_source < self.destination.distance_from_source:            
             
             # print "my index = {0}, destination index = {1}, ancestor length = {2}".format(self.index, self.destination.index, len(self.ancestors))
             
@@ -71,10 +70,10 @@ class PathNode(Node):
             
             for node_index in self.outgoing_connections:                
                 potential_child = PathNode(node_index, self.distance_from_source + 1, self.A, childs_ancestors, self.destination)                
-                if potential_child.check_existence_of_path_to_destination() and not potential_child.check_for_identical_ancestor():
+                if potential_child.check_existence_of_path_to_destination() and (allow_double_back or not potential_child.check_for_identical_ancestor()):
                     child = potential_child
                     # print "Child of {0} with index {1}".format(self.index, child.index)
-                    child.propagate()
+                    child.propagate(allow_double_back)
                     self.paths += child.paths
                     #print self.paths
                 
@@ -85,21 +84,21 @@ class PathNode(Node):
         
         return True
         
-    def find_shortest_path(self):
+    def find_shortest_paths(self):
         path_length = 1
         self.paths = list()
         while len(self.paths) == 0 and path_length < PathNode.maximum_path_length:
             self.destination.distance_from_source = path_length
-            self.propagate()            
+            self.propagate(False)            
             
             path_length += 1
             	  	    
         return self.paths
         
-    def find_shortest_path_excluding(self, node_index):
+    def find_shortest_paths_excluding(self, node_index):
         A = self.A
         self.A = self.A.cutoff_node(node_index)
-        shortest_paths = self.find_shortest_path()
+        shortest_paths = self.find_shortest_paths()
         self.A = A
         return shortest_paths
         
@@ -117,7 +116,7 @@ class CycleEndpoint(PathNode):
         PathNode.__init__(self, index, 0, node_adjacency_matrix, [], destination)
         
     def check_if_cycle_exists(self):
-        self.propagate()
+        self.propagate(False)
         if len(self.paths) == 0:
             return False
         else:
@@ -134,11 +133,11 @@ class InclusivePath(object):
     
     def find_inbound_paths(self):
         inbound_source = PathNode(self.source.index, 0, self.source.A, [], self.checkpoint)
-        self.inbound_paths = inbound_source.find_shortest_path()
+        self.inbound_paths = inbound_source.find_shortest_paths()
         
     def find_outbound_paths(self):
         self.checkpoint.destination = self.source.destination
-        self.outbound_paths = self.checkpoint.find_shortest_path()
+        self.outbound_paths = self.checkpoint.find_shortest_paths()
         
     def merge_paths(self):
         paths = list()

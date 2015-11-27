@@ -7,33 +7,58 @@ reload(data)
 reload(node)
 reload(node_adjacency_matrix)
 
+print "Output for Problem 2.18"
+print "\n"
 
-print "2.18 a)"
+print "a)"
 A = node_adjacency_matrix.NodeAdjacencyMatrix((20,20), buffer=np.array(data.A_data), dtype=int)
 print "Shortest cycle:"
 print A.find_shortest_cycles()
 print "\n"
 
-print "2.18 b)"
+print "b)"
 destination = node.Node(17, 1)
 source = node.PathNode(13, 0, A, [], destination)
 print "Shortest path between 13 and 17:"
-print source.find_shortest_path()
+print source.find_shortest_paths()
 print "\n"
 
 
-print "2.18 c)"
+print "c)"
 A_modified = A.cutoff_node(3)                                                            
 source = node.PathNode(13, 0, A_modified, [], destination)
 print "Shortest path between 13 and 17 that does not go through 3:"
-print source.find_shortest_path_excluding(3)
+print source.find_shortest_paths_excluding(3)
 print "\n"
 
-print "2.18 d)"
+print "d)"
 print "Shortest paths between 13 and 17 that go through 9:"
 print source.find_shortest_paths_including(9)
 print "\n"
 
+print "e)"
+print "The most common ending node for paths of length 10, starting at node 5:"
+print A.find_most_common_ending_node(10, 5)
+print "{0} paths start and end this way".format(A.count_paths(10, 5, A.find_most_common_ending_node(10, 5)))
+print "\n"
+
+print "f)"
+print "The most common starting node for paths of length 10, that end at node 8:"
+print A.find_most_common_starting_node(10, 8)
+print "{0} paths start and end this way".format(A.count_paths(10, A.find_most_common_starting_node(10, 8), 8))
+print "\n"
+
+print "g)"
+print "The most common node pair [starting, ending]:"
+most_common_pair = A.find_most_common_node_pair(10)
+print most_common_pair
+print "{0} paths start and end this way".format(A.count_paths(10, most_common_pair[0], most_common_pair[1]))
+
+print "\n"
+
+#print len(A.list_paths(10, 16, 9))
+#print A.count_paths(10, 16, 9)
+#print A.list_paths(10, 16, 9)
 
 
 

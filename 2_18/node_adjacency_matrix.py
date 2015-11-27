@@ -12,6 +12,29 @@ class NodeAdjacencyMatrix(numpy.ndarray):
         B = numpy.linalg.matrix_power(self, path_length)
         return B[ending_node - 1, starting_node - 1]
         
+    def find_most_common_ending_node(self, path_length, starting_node):
+        B = numpy.linalg.matrix_power(self, path_length)
+        ending_node_path_counts = B[:, starting_node - 1]
+        return numpy.argmax(ending_node_path_counts) + 1
+        
+    def find_most_common_starting_node(self, path_length, ending_node):
+        B = numpy.linalg.matrix_power(self, path_length)
+        starting_node_path_counts = B[ending_node - 1, :]
+        return numpy.argmax(starting_node_path_counts) + 1
+        
+    def find_most_common_node_pair(self, path_length):
+        B = numpy.linalg.matrix_power(self, path_length)
+        n = len(B)
+        index_of_largest_element_of_B = numpy.unravel_index(numpy.argmax(B), (n,n))
+        node_pair = [index_of_largest_element_of_B[1] + 1, index_of_largest_element_of_B[0] + 1]
+        return node_pair
+            
+    def list_paths(self, path_length, starting_node, ending_node):
+        destination = node.Node(ending_node, path_length)
+        source = node.PathNode(starting_node, 0, self, [], destination)
+        source.propagate(True)
+        return source.paths
+        
     def find_outgoing_connections(self, index):
         outgoing_connections = []
         outgoing_connection_statuses =  self[:, index - 1]
@@ -32,7 +55,7 @@ class NodeAdjacencyMatrix(numpy.ndarray):
         shortest_cycles = list()
         for node_index in range(1,number_of_nodes + 1):
             endpoint = node.CycleEndpoint(node_index, 2, self)
-            shortest_paths = endpoint.find_shortest_path() 
+            shortest_paths = endpoint.find_shortest_paths() 
             if len(shortest_paths) > 0:
                 path_length = len(shortest_paths[0])
                        
