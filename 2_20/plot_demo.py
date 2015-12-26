@@ -7,7 +7,7 @@ def zed(t):
 
 
 z = []
-t = range(0, 100)
+t = range(0, 1000)
 
 for i in t:
     z.append(zed(i))
@@ -19,7 +19,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 fig = plt.figure()
-plt.scatter(z, t)
+plt.plot(t, z)
 plt.show()
 
 fig.savefig("graph.png")
