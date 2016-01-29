@@ -1,0 +1,13 @@
+Want to find out how long it will take for a perturbation of 1k rabits to
+propagate to all the other species.
+
+x(n) = A^n * x(0)
+
+
+epoch
+
+PerturbationVector(extends list)
+    get_zero_components
+        [i for i, e in enumerate(self) if e ==0]
+
+    
