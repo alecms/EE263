@@ -10,4 +10,140 @@ PerturbationVector(extends list)
     get_zero_components
         [i for i, e in enumerate(self) if e ==0]
 
+    update
+
+Trying to get a vector s where si is the smallest number of epochs for which species i is perturbed.
+
+initialize each element of s to equal -1.
+
+We need to simulate the propogation of the perturbation by repeatedly multiplying x by A. After each epoch is simulated,
+look at each element of x
+
+After the end-of-epoch value of x has been calculated run these checks:
+
+    If an element of x is non-zero and the same element of s is still negative one, 
+        Set that element of s to the current epoch
+
+    If the current epoch is equal to the maximum number of epochs to simulate
+        End
+
+    If none of the elements of s is -1, 
+        End
+
+
+Initialize epochs_until_perturbation with -1 for each element
+create new perturbation vector(initial perturbation)
+
+while(true)
+
+    perturbation_vector.check_for_newly_perturbed_species()
     
+    # If there are no more unperturbed species
+    if !perturbation_vector.species_list.check_for_unperturbed_species()
+        break
+
+    perturbation_vector.propagate()
+    
+    If perturbation_vector.epoch is equal to maximum number of epochs to simulate
+        break
+    
+
+Class PerturbationVector
+
+Properties:
+
+data
+epoch
+species_list
+
+Methods:
+
+constructor(initial_perturbation)
+    self.data = initial_perturbation
+    self.epoch = 0
+    self.species_list = new SpeciesList()
+
+propagate
+    data = A.dot(data) 
+    self.epoch += 1
+
+check_for_newly_perturbed_species()
+    
+    species_index = 0
+    for species in self.species_list.data
+        if species.epochs_until_perturbation < 0 and self.data[species_index] > 0
+            species.epochs_until_perturbation ==  self.epoch
+    
+        species_index += 1    
+    
+-----------------------------------------
+
+Class SpeciesList
+
+Constants:
+
+species_names = [bear, cougar, deer, rabbit, mouse, raccoon, frog, worm, robin, eagle]
+
+
+Properties:
+
+data
+
+constructor()
+   
+    species_index = 0
+    for species_name in species_names
+        data[species_index] = new Species(species_name)
+        species_index += 1
+------------------------------------
+        
+Class Species
+
+Properties:
+epochs_until_perturbation
+name
+
+constructor(species_name)
+    self.name = species_name
+    self.epochs_until_perturbation = -1
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
