@@ -42,31 +42,26 @@ print S_coefficients
 
 # Plot the cone responsiveness.
 fig = plt.figure(figsize=(17,8))
+ax = fig.add_subplot(111)
 
-plt.plot(wavelength, L_cone_log, linestyle = '-', marker='*')
-plt.plot(wavelength, M_cone_log, linestyle = '--', marker = 'x')
-plt.plot(wavelength, S_cone_log, linestyle = '-', marker = 'o')
+ax.plot(wavelength, L_cone_log, label='L cones', linestyle = '-', marker='*')
+ax.plot(wavelength, M_cone_log, label='M cones', linestyle = '--', marker = 'x')
+ax.plot(wavelength, S_cone_log, label='S cones', linestyle = '-', marker = 'o')
+ax.set_xlabel('Light Wavelength (nm)');
+ax.set_ylabel('Log Relative Sensitivity');
+ax.legend(loc=3)
+ax.set_title('Approximate Human Cone Sensitivities')
 plt.show()
+
+
+
+# Spectral Power Distribution of phosphors from shortest to longest wavelength
+B_phosphor = np.array([30, 35, 45, 75, 90, 100, 90, 75, 45, 35, 30, 26, 23, 21, 20, 19, 18, 17, 16, 15])
+G_phosphor = np.array([21, 23, 26, 30, 35, 45, 75, 90, 100, 90, 75, 45, 35, 30, 26, 23, 21, 20, 19, 18])
+R_phosphor = np.array([15, 16, 17, 18, 19, 21, 23, 26, 30, 35, 45, 75, 90, 100, 90, 75, 45, 35, 30, 26])
+
+
 """
-hold;
-plot(wavelength,M_cone_log,'--x');
-plot(wavelength,S_cone_log,'-o')
-xlabel('Light Wavelength (nm)');
-ylabel('Log Relative Sensitivity');
-legend('L cones', 'M cones', 'S cones');
-title('Approximate Human Cone Sensitivities');
-grid;
-
-
-# Spectral Power Distribution of phosphors from shortest to longest =
-wavelength
-B_phosphor =3D [30 35 45 75 90 100 90 75 45 35 30 26 23 21 20 19 18 17 =
-16 15];
-G_phosphor =3D [21 23 26 30 35 45 75 90 100 90 75 45 35 30 26 23 21 20 =
-19 18];
-R_phosphor =3D [15 16 17 18 19 21 23 26 30 35 45 75 90 100 90 75 45 35 =
-30 26];
-
 #Plot the phosphors
 figure(2);
 plot(wavelength, B_phosphor,'-*');
