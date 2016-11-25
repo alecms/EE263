@@ -53,56 +53,56 @@ ax.legend(loc=3)
 ax.set_title('Approximate Human Cone Sensitivities')
 plt.show()
 
-
-
 # Spectral Power Distribution of phosphors from shortest to longest wavelength
-B_phosphor = np.array([30, 35, 45, 75, 90, 100, 90, 75, 45, 35, 30, 26, 23, 21, 20, 19, 18, 17, 16, 15])
-G_phosphor = np.array([21, 23, 26, 30, 35, 45, 75, 90, 100, 90, 75, 45, 35, 30, 26, 23, 21, 20, 19, 18])
-R_phosphor = np.array([15, 16, 17, 18, 19, 21, 23, 26, 30, 35, 45, 75, 90, 100, 90, 75, 45, 35, 30, 26])
+B_phosphor = np.array([30, 35, 45, 75, 90, 100, 90, 75, 45, 35, 30, 26, 23, 21, 20, 19, 18, 17, 16, 15], dtype = float)
+G_phosphor = np.array([21, 23, 26, 30, 35, 45, 75, 90, 100, 90, 75, 45, 35, 30, 26, 23, 21, 20, 19, 18], dtype = float)
+R_phosphor = np.array([15, 16, 17, 18, 19, 21, 23, 26, 30, 35, 45, 75, 90, 100, 90, 75, 45, 35, 30, 26], dtype = float)
 
 
-"""
 #Plot the phosphors
-figure(2);
-plot(wavelength, B_phosphor,'-*');
-hold;
-plot(wavelength, G_phosphor,'-o');
-plot(wavelength, R_phosphor,'--x');
-grid;
-xlabel('Light wavelength (nm)');
-ylabel('Spectral Power Distribution of Phosphors');
-legend('B phosphor', 'G phosphor', 'R phosphor');
+fig = plt.figure(figsize=(17,8))
+ax = fig.add_subplot(111)
 
+ax.plot(wavelength, B_phosphor, label='B phosphor', linestyle = '-', marker='*')
+ax.plot(wavelength, G_phosphor, label='G phosphor', linestyle = '-', marker = 'o')
+ax.plot(wavelength, R_phosphor, label='R phosphor', linestyle = '--', marker = 'x')
+
+ax.set_xlabel('Light Wavelength (nm)');
+ax.set_ylabel('Log Relative Sensitivity');
+ax.legend(loc=3)
+ax.set_title('Spectral Power Distribution of Phosphors')
+plt.show()
 
 # This is the spectral power distribution of the test light from the=20
 # shortest wavelength to the longest.=20
-test_light =3D [ 58.2792 42.3496 51.5512 33.3951 43.2907 22.5950 57.9807 =
-76.0365  52.9823 64.0526 20.9069  37.9818  78.3329  68.0846 46.1095 =
-56.7829 79.4211 5.9183  60.2869  5.0269]';
+test_light = np.array([58.2792, 42.3496, 51.5512, 33.3951, 43.2907, 22.5950, 
+57.9807, 76.0365,  52.9823, 64.0526, 20.9069,  37.9818,  78.3329,  68.0846, 
+46.1095, 56.7829, 79.4211, 5.9183,  60.2869,  5.0269], dtype = float)
 
 #Plot the test light
-figure(3);
-plot(wavelength, test_light, '-*');
-grid;
-xlabel('Light wavelength (nm)');
-ylabel('Spectral Power Distribution of Test Light');
-title('Test light');
+fig = plt.figure(figsize=(17,8))
+ax = fig.add_subplot(111)
+ax.plot(wavelength, test_light, linestyle = '-', marker='*')
+ax.set_xlabel('Light Wavelength (nm)');
+ax.set_ylabel('Spectral Power Distribution of Test Light');
+ax.set_title('Test light')
+plt.show()
 
 # Define approximate spectrums for sunlight and a tungsten bulb. =20
 # The [powers are in order of increasing wavelength
-tungsten =3D [ 20 30 40 50 60 70  80  90 100 110 120 130 140 150 160 170 =
-180 190 200 210];
-sunlight =3D [40 70 100 160 240 220  180 160 180 180 160 140 140 140 140 =
-130 120 116 110 110];
+tungsten = np.array([ 20, 30, 40, 50, 60, 70,  80,  90, 100, 110, 120, 130, 
+    140, 150, 160, 170, 180, 190, 200, 210], dtype = float)
+sunlight = np.array([40, 70, 100, 160, 240, 220,  180, 160, 180, 180, 160, 
+    140, 140, 140, 140, 130, 120, 116, 110, 110], dtype = float)
 
-#Plot the specturms
-figure(4);
-plot(wavelength,tungsten,'-*');
-hold
-plot(wavelength,sunlight,'-o');
-xlabel('Light wavelength (nm)');
-ylabel('Spectral Power Distributions');
-legend('Tungsten','Sunlight');
-grid;
-</PRE></BODY></HTML>
-"""
+fig = plt.figure(figsize=(17,8))
+ax = fig.add_subplot(111)
+
+ax.plot(wavelength, tungsten, label='Tungsten', linestyle = '-', marker='*')
+ax.plot(wavelength, sunlight, label='Sunlight', linestyle = '-', marker = 'o')
+
+ax.set_xlabel('Light Wavelength (nm)');
+ax.set_ylabel('Spectral Power Distributions');
+ax.legend(loc=3)
+ax.set_title('Spectral Power Distribution of Light Sources')
+plt.show()
