@@ -23,12 +23,6 @@ M_cone_log = np.array([-.8, -.85, -.85, -.6, -.5, -.4, -.3, -.2, -.1, -.15,
 S_cone_log = np.array([-.4, -.3, -.2, -.1, -.3, -.6, -1.2, -1.8, -2.5, -3.2 , -4.1, 
     -5, -6, -7, -8, -9, -10, -10.5, -11, -11.5], dtype = float)
 
-
-print L_cone_log
-print M_cone_log
-print S_cone_log
-
-
 # Raise everything to the 10 power to get the actual responsitivies.
 # These vectors contain the coefficients l_i, m_i, and s_i described in
 # the problem statement from shortest to longest wavelength.
@@ -36,9 +30,6 @@ L_coefficients = 10. ** L_cone_log
 M_coefficients = 10. ** M_cone_log
 S_coefficients = 10. ** S_cone_log
 
-print L_coefficients
-print M_coefficients
-print S_coefficients
 
 # Plot the cone responsiveness.
 fig = plt.figure(figsize=(17,8))
@@ -106,3 +97,15 @@ ax.set_ylabel('Spectral Power Distributions');
 ax.legend(loc=3)
 ax.set_title('Spectral Power Distribution of Light Sources')
 plt.show()
+
+
+# Problem 3.2 c)
+
+t = test_light
+C = np.vstack((L_coefficients, M_coefficients, S_coefficients))
+P = np.transpose(np.vstack((R_phosphor, G_phosphor, B_phosphor)))
+x = np.dot(np.dot(np.linalg.inv(np.dot(C, P)), C), t)
+print x 
+
+        
+
